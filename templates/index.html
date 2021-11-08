@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Flask Printer GUI</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://unpkg.com/vue-range-component@1.0.3/dist/vue-range-slider.min.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/vue-range-component@1.0.3/dist/vue-range-slider.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div id="vm">
+			<div id="header">
+				<h1 @click="connect" class="icon" v-if="connected">&#128077</h1>
+				<h1 @click="connect" class="icon" v-else>&#128078</h1>
+				<h1 id="event">Welcome:</h1>
+				<h1>[[ port ]]</h1>
+			</div>
+			<div class="grid-container">
+				<div id="control">
+					<div id="motion">
+						<div id="back" @click="move_up">&uarr;</div>
+						<div id="forth" @click="move_down">&darr;</div>
+						<div id="left" @click="">&larr;</div>
+						<div id="right" @click="">&rarr;</div>
+					</div>
+					<button @click="setup">Setup</button>
+					<button @click="print">Print</button>
+					<button @click="pause">Pause</button>
+					<div id="test">
+						<p>We are on Layer:</p>
+						<input v-model="layer" placeholder="">
+					</div>
+				</div>
+				<div id="options">
+					<div>
+						<h5>Slicer:</h5>
+						<p>Extrusion Rate: [[ slicer_options.extrusion_rate ]]</p>
+						<!-- <input v-model="slicer_options.extrusion_rate" placeholder=""> -->
+						<vue-range-slider :tooltip="null" :min="+0.05" :max="+0.15" :step="+0.01" ref="slider" v-model="slicer_options.extrusion_rate"></vue-range-slider>
+						<p>Feed Rate: [[ slicer_options.feed_rate ]]</p>
+						<vue-range-slider :tooltip="null" :min="+0" :max="+2000" step="+1" ref="slider" v-model="slicer_options.feed_rate"></vue-range-slider>
+						<p>Layer Hight: [[ slicer_options.layer_hight ]]</p>
+						<vue-range-slider :tooltip="null" :min="+0.2" :max="+0.8" step="+0.1" ref="slider" v-model="slicer_options.layer_hight"></vue-range-slider>
+						<h5>Toolpath</h5>
+						<select name="Toolpath Type" class="form-control" v-model="toolpath_type">
+							<option value="NONE">Nothing</option>
+							<option value="SINE">Sinus</option>
+							<option value="SQUARE">Square</option>
+							<option value="SAW">Saw</option>
+						</select>
+						<p>Magnitude: [[ toolpath_options.magnitude ]]</p>
+						<vue-range-slider :tooltip="null" :min="+1" :max="+10" :step="+1" ref="slider" v-model="toolpath_options.magnitude"></vue-range-slider>
+						<p>Wave Lenght: [[ toolpath_options.wave_lenght ]]</p>
+						<vue-range-slider :tooltip="null" :min="+1" :max="+20" :step="+1" ref="slider" v-model="toolpath_options.wave_lenght"></vue-range-slider>
+						<p>Rasterisation: [[ toolpath_options.rasterisation ]]</p>
+						<vue-range-slider :tooltip="null" :min="+1" :max="+100" :step="+1" ref="slider" v-model="toolpath_options.rasterisation"></vue-range-slider>
+					</div>
+				</div>
+				<div id="log">
+					<p>[[ log_text ]]</p>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="{{ url_for('static', filename='js/vue_instance.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/keep_alive.js') }}"></script>
+</html>

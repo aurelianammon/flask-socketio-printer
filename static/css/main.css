@@ -1,0 +1,131 @@
+#vm {
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    grid-template-rows: 50px 1fr;
+}
+
+#header {
+    overflow: auto;
+}
+
+#header h1 {
+    float: left;
+    margin: 10px;
+    font-size: 25px;
+    font-style: italic;
+    font-weight: 900;
+}
+
+#header .icon {
+    /* float: right; */
+    cursor: pointer;
+
+    animation-name: wave-animation;  /* Refers to the name of your @keyframes element below */
+    animation-duration: 2.5s;        /* Change to speed up or slow down */
+    animation-iteration-count: infinite;  /* Never stop waving :) */
+    transform-origin: 50% 50%;       /* Pivot around the bottom-left palm */
+}
+
+@keyframes wave-animation {
+    0% { transform: rotate( 0.0deg) }
+    10% { transform: rotate(14.0deg) }  /* The following five values can be played with to make the waving more or less extreme */
+    20% { transform: rotate(-8.0deg) }
+    30% { transform: rotate(14.0deg) }
+    40% { transform: rotate(-4.0deg) }
+    50% { transform: rotate(10.0deg) }
+    60% { transform: rotate( 0.0deg) }  /* Reset for the last half to pause */
+    100% { transform: rotate( 0.0deg) }
+}
+
+#event {
+    /* cursor: pointer; */
+}
+
+#motion div {
+    position: absolute;
+}
+
+#motion {
+    width: 150px;
+    height:150px;
+    font-size: 50px;
+    line-height: 50px;
+    cursor: pointer;
+    position: relative;
+    margin: auto;
+}
+
+#motion div {
+    position: absolute;
+}
+
+#motion #back {
+    top: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 40px;
+}
+
+#motion #forth {
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 40px;
+}
+
+#motion #left {
+    left: 0;
+    top: 50px;
+}
+
+#motion #right {
+    right: 0;
+    top: 50px;
+}
+
+p {
+    margin: unset;
+}
+
+.grid-container {
+    clear: both;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 100%;
+}
+#control {
+    padding: 10px;
+    background-color: #7b00d9;
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 1;
+    border-top-left-radius: 20px;
+}
+
+#log {
+    padding: 10px;
+    background-color: #9200ff8f;
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 1;
+    box-shadow: inset 11px 0 8px -10px #3c3c3c, inset -11px 0px 8px -10px #3c3c3c;
+}
+
+#options {
+    padding: 10px;
+    background-color: #7b00d9;
+    color: white;
+    grid-column: 3 / span 1;
+    grid-row: 1 / span 1;
+    border-top-right-radius: 20px;
+}
+
+button {
+    background-color: black;
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
