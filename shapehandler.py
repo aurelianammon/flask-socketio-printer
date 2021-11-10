@@ -18,23 +18,23 @@ class Shapehandler:
         }
 
     # default test shape
-    def create_test(self, factor = 0):
+    def create_test(self, factor = 4):
         diameter = 50
-        number_of_points = 4
-        center = pc.point(50, 50, 0)
+        number_of_points = factor
+        center = pc.point(100, 100, 0)
         radius = math.sqrt(pow(diameter, 2) + pow(diameter, 2)) / 2
-        rotation = math.pi / number_of_points + math.pi / 180 * factor
 
         points = []
 
         i = 0
         while i < number_of_points:
-            x = center[0] + radius * math.cos(2 * math.pi * i / number_of_points + rotation)
-            y = center[1] + radius * math.sin(2 * math.pi * i / number_of_points + rotation)
+            x = center[0] + radius * math.cos(2 * math.pi * i / number_of_points)
+            y = center[1] + radius * math.sin(2 * math.pi * i / number_of_points)
             z = 0
             points.append(pc.point(round(x, 5), round(y, 5), round(z, 5)))
             i += 1
 
+        points.append(points[0])
         return points
 
     # stepover test shape

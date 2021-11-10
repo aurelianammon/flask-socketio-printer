@@ -154,7 +154,8 @@ def start_print():
         print("angle = " + str(angle))
 
         # create the shape points
-        points = shape_handler.create_stepover(angle, 3)
+        points = shape_handler.create_test(10)
+        # points = shape_handler.create_stepover(angle, 3)
         points = shape_handler.toolpath(points, tooplpath_type)
 
         repetitions = 1

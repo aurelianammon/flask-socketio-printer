@@ -5,6 +5,10 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         VueRangeSlider
     },
     data: {
+        eth: {
+            current: 0,
+            last: 0,
+        },
         polling: null,
         layer: 0,
         connected: false,
@@ -49,17 +53,43 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
     computed: {
         isPrinting: function () {
           return this.polling != null
+        },
+        printLable: function() {
+            if (this.isPrinting) {
+                return "Stop"
+            } else {
+                return "Print"
+            }
         }
     },
     methods: {
         poll () {
             this.polling = setInterval(() => {
-                this.slicer_options.feed_rate = this.slicer_options.feed_rate + 10
-            }, 1 * 1000)
+                // this.slicer_options.extrusion_rate += 0.01
+
+                fetch("https://api2.binance.com/api/v3/ticker/price", {
+                    "method": "GET",
+                    "headers": {}
+                })
+                .then(async response => {
+                    const data = await response.json();
+                    this.eth.last = this.eth.current
+                    this.eth.current = data.filter(element => element.symbol == "ETHEUR")[0].price
+                    output = this.scale(this.eth.current - this.eth.last, -1, 1, -2, 2)
+                    this.toolpath_options.magnitude += output
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+
+            }, 10 * 1000)
         },
         unpoll () {
             clearInterval(this.polling)
             this.polling = null
+        },
+        scale (number, inMin, inMax, outMin, outMax) {
+            return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
         },
         move_up: function (event) {
             socket.emit('move_up');
@@ -92,5 +122,19 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
     created () {
         VueRangeSlider.methods.handleKeyup = ()=> console.log;
         VueRangeSlider.methods.handleKeydown = ()=> console.log;
+
+        fetch("https://api2.binance.com/api/v3/ticker/price", {
+            "method": "GET",
+            "headers": {}
+        })
+        .then(async response => {
+            const data = await response.json();
+            this.eth.current = data.filter(element => element.symbol == "ETHEUR")[0].price
+            this.eth.last = this.eth.current
+            console.log(this.eth)
+        })
+        .catch(err => {
+            console.error(err);
+        });
     }
 })
