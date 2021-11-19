@@ -9,6 +9,7 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             current: 0,
             last: 0,
         },
+        sentiment: 0,
         polling: null,
         layer: 0,
         connected: false,
@@ -67,22 +68,41 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             this.polling = setInterval(() => {
                 // this.slicer_options.extrusion_rate += 0.01
 
-                fetch("https://api2.binance.com/api/v3/ticker/price", {
+                // fetch("https://api2.binance.com/api/v3/ticker/price", {
+                //     "method": "GET",
+                //     "headers": {}
+                // })
+                // .then(async response => {
+                //     const data = await response.json();
+                //     this.eth.last = this.eth.current
+                //     this.eth.current = data.filter(element => element.symbol == "ETHEUR")[0].price
+                //     output = this.scale(this.eth.current - this.eth.last, -1, 1, -2, 2)
+                //     this.toolpath_options.magnitude += output
+                // })
+                // .catch(err => {
+                //     console.error(err);
+                // });
+
+                fetch("http://localhost:7000/sentiment", {
                     "method": "GET",
                     "headers": {}
                 })
                 .then(async response => {
                     const data = await response.json();
-                    this.eth.last = this.eth.current
-                    this.eth.current = data.filter(element => element.symbol == "ETHEUR")[0].price
-                    output = this.scale(this.eth.current - this.eth.last, -1, 1, -2, 2)
-                    this.toolpath_options.magnitude += output
+                    this.sentiment = data.sentiment
+                    this.toolpath_options.magnitude = Math.abs(data.sentiment)
+                    // data.length
+                    if (this.sentiment < 0) {
+                        this.toolpath_type = "SQUARE"
+                    } else {
+                        this.toolpath_type = "SINE"
+                    }
                 })
                 .catch(err => {
                     console.error(err);
                 });
 
-            }, 10 * 1000)
+            }, 3 * 1000)
         },
         unpoll () {
             clearInterval(this.polling)
@@ -123,15 +143,34 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         VueRangeSlider.methods.handleKeyup = ()=> console.log;
         VueRangeSlider.methods.handleKeydown = ()=> console.log;
 
-        fetch("https://api2.binance.com/api/v3/ticker/price", {
-            "method": "GET",
-            "headers": {}
+        // fetch("https://api2.binance.com/api/v3/ticker/price", {
+        //     "method": "GET",
+        //     "headers": {}
+        // })
+        // .then(async response => {
+        //     const data = await response.json();
+        //     this.eth.current = data.filter(element => element.symbol == "ETHEUR")[0].price
+        //     this.eth.last = this.eth.current
+        //     console.log(this.eth)
+        // })
+        // .catch(err => {
+        //     console.error(err);
+        // });
+
+        fetch("http://localhost:7000/sentiment", {
+                    "method": "GET",
+                    "headers": {}
         })
         .then(async response => {
             const data = await response.json();
-            this.eth.current = data.filter(element => element.symbol == "ETHEUR")[0].price
-            this.eth.last = this.eth.current
-            console.log(this.eth)
+            this.sentiment = data.sentiment
+            this.toolpath_options.magnitude = Math.abs(data.sentiment)
+            // data.length
+            if (this.sentiment < 0) {
+                this.toolpath_type = "SQUARE"
+            } else {
+                this.toolpath_type = "SINE"
+            }
         })
         .catch(err => {
             console.error(err);
