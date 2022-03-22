@@ -10,6 +10,7 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             last: 0,
         },
         sentiment: 0,
+        lenght: 0,
         polling: null,
         layer: 0,
         connected: false,
@@ -24,7 +25,8 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         toolpath_options: {
             magnitude: 0,
             wave_lenght: 0,
-            rasterisation: 0
+            rasterisation: 0,
+            diameter: 0
         },
         toolpath_type: "NONE"
     },
@@ -83,7 +85,7 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
                 //     console.error(err);
                 // });
 
-                fetch("http://localhost:7000/sentiment", {
+                fetch("http://localhost:8888/sentiment", {
                     "method": "GET",
                     "headers": {}
                 })
@@ -97,11 +99,22 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
                     } else {
                         this.toolpath_type = "SINE"
                     }
+                    if (this.lenght < data.lenght) {
+                        if (this.toolpath_options.diameter < 100) {
+                            console.log("small")
+                            this.toolpath_options.diameter = this.toolpath_options.diameter + 5
+                        }
+                    } else if (this.lenght > data.lenght) {
+                        if (this.toolpath_options.diameter > 10) {
+                            console.log("big")
+                            this.toolpath_options.diameter = this.toolpath_options.diameter - 5
+                        }
+                    }
+                    this.lenght = data.lenght
                 })
                 .catch(err => {
                     console.error(err);
                 });
-
             }, 3 * 1000)
         },
         unpoll () {
@@ -157,7 +170,7 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         //     console.error(err);
         // });
 
-        fetch("http://localhost:7000/sentiment", {
+        fetch("http://localhost:8888/sentiment", {
                     "method": "GET",
                     "headers": {}
         })

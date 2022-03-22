@@ -6,8 +6,6 @@ import time
 import getopt
 import random
 
-from werkzeug.datastructures import ContentSecurityPolicy
-
 from options import *
 from printhandler import DefaultUSBHandler
 
@@ -47,7 +45,8 @@ def hello():
     emit('toolpath_options', {
         'magnitude': shape_handler.params_toolpath['magnitude'],
         'wave_lenght': shape_handler.params_toolpath['wave_lenght'],
-        'rasterisation': shape_handler.params_toolpath['rasterisation']
+        'rasterisation': shape_handler.params_toolpath['rasterisation'],
+        'diameter': shape_handler.params_toolpath['diameter']
     })
 
 @socketio.on('slicer_options')
@@ -58,9 +57,11 @@ def slicer_options(data):
 
 @socketio.on('toolpath_options')
 def toolpath_options(data):
-    shape_handler.params_toolpath['magnitude'] = data["magnitude"]
+    shape_handler.params_toolpath['mag_goal'] = data["magnitude"]
     shape_handler.params_toolpath['wave_lenght'] = data["wave_lenght"]
     shape_handler.params_toolpath['rasterisation'] = data["rasterisation"]
+    shape_handler.params_toolpath['dia_goal'] = data["diameter"]
+    # print(shape_handler.params_toolpath, data)
 
 @socketio.on('layer')
 def setLayer(data):
@@ -136,6 +137,9 @@ def start_print():
     
     printing = True
 
+    shape_handler.params_toolpath['magnitude'] = shape_handler.params_toolpath["mag_goal"]
+    shape_handler.params_toolpath['diameter'] = shape_handler.params_toolpath["dia_goal"]
+
     print_handler.send(slicer_handler.start())
     while print_handler.is_printing():
         time.sleep(0.1)
@@ -144,6 +148,7 @@ def start_print():
     global height
     global tooplpath_type
     angle = 0
+
     # next_iteration = layer + 10
     # while layer < next_iteration:
     while printing:
@@ -169,8 +174,11 @@ def start_print():
             # update layer hight
             layer = layer + 1
             height = height + slicer_handler.params['layer_hight']
-            print (height)
-            emit('layer', {'layer': layer})
+            print("height = " + str(height))
+            emit('layer', {'layer': height})
+
+        if(height > 150):
+            printing = False
         
     print_handler.send(slicer_handler.end())
 

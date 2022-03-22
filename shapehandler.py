@@ -12,17 +12,26 @@ import numpy as np
 class Shapehandler:
     def __init__(self):
         self.params_toolpath = {
-            "magnitude": 2,
+            "magnitude": 0,
+            "mag_goal": 0,
             "wave_lenght": 8,
-            "rasterisation": 40
+            "rasterisation": 15,
+            "diameter": 30,
+            "dia_goal": 30
         }
 
     # default test shape
     def create_test(self, factor = 4):
-        diameter = 50
+
+        growth_factor = 0.3
+        if (self.params_toolpath["dia_goal"] > self.params_toolpath["diameter"]):
+            self.params_toolpath["diameter"] = self.params_toolpath["diameter"] + growth_factor
+        elif (self.params_toolpath["dia_goal"] < self.params_toolpath["diameter"]):
+            self.params_toolpath["diameter"] = self.params_toolpath["diameter"] - growth_factor
+
         number_of_points = factor
         center = pc.point(100, 100, 0)
-        radius = math.sqrt(pow(diameter, 2) + pow(diameter, 2)) / 2
+        radius = math.sqrt(pow(self.params_toolpath["diameter"], 2) + pow(self.params_toolpath["diameter"], 2)) / 2
 
         points = []
 
@@ -85,6 +94,14 @@ class Shapehandler:
         return points
 
     def toolpath(self, points, shape = "NONE"):
+
+        # print(points, self.params_toolpath)
+
+        growth_factor = 0.1
+        if (self.params_toolpath["mag_goal"] > self.params_toolpath["magnitude"]):
+            self.params_toolpath["magnitude"] = self.params_toolpath["magnitude"] + growth_factor
+        elif (self.params_toolpath["mag_goal"] < self.params_toolpath["magnitude"]):
+            self.params_toolpath["magnitude"] = self.params_toolpath["magnitude"] - growth_factor
 
         step_length = self.params_toolpath["wave_lenght"] / self.params_toolpath["rasterisation"]
         rotation = 360 / self.params_toolpath["rasterisation"]

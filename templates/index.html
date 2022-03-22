@@ -57,6 +57,8 @@
 						<vue-range-slider :tooltip="null" :min="+1" :max="+20" :step="+1" ref="slider" v-model="toolpath_options.wave_lenght"></vue-range-slider>
 						<p>Rasterisation: [[ toolpath_options.rasterisation ]]</p>
 						<vue-range-slider :tooltip="null" :min="1" :max="100" :step="1" ref="slider" v-model="toolpath_options.rasterisation"></vue-range-slider>
+						<p>Diameter: [[ toolpath_options.diameter ]]</p>
+						<vue-range-slider :tooltip="null" :min="10" :max="100" :step="1" ref="slider" v-model="toolpath_options.diameter"></vue-range-slider>
 					</div>
 				</div>
 				<div id="log">
