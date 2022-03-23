@@ -9,6 +9,7 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             current: 0,
             last: 0,
         },
+        synced_to_bot: false,
         sentiment: 0,
         lenght: 0,
         polling: null,
@@ -51,7 +52,15 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         },
         toolpath_type: function (newValue, oldValue) {
             socket.emit('toolpath_type', {'toolpath_type': newValue});
-        }
+        },
+        synced_to_bot: function (newValue, oldValue) {
+            if (newValue == false) {
+                this.unpoll()
+            }
+            else {
+                this.poll()
+            }
+        },
     },
     computed: {
         isPrinting: function () {
@@ -143,9 +152,9 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         print: function(event) {
             socket.emit('start_print');
             if (this.isPrinting) {
-                this.unpoll()
+                // this.unpoll()
             } else {
-                this.poll()
+                // this.poll()
             }
         },
         pause: function(event) {
