@@ -62,8 +62,9 @@ class Slicerhandler:
         gcode = []
 
         gcode.append("G90")
-        gcode.append("G1 X0 Y0 Z" + str(self.params['layer_hight']))
-        gcode.append("G1 X100 E25")
+        # the following 2 lines are the likely the brim extrustion commands to get the material flowing
+        # gcode.append("G1 X0 Y0 Z" + str(self.params['layer_hight']))
+        # gcode.append("G1 X100 E25")
         gcode.append("G90")
         gcode.append("G92 E0")
         gcode.append("G1 E-4")
