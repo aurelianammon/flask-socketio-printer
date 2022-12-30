@@ -12,8 +12,10 @@ from printhandler import DefaultUSBHandler
 import shapehandler
 import slicerhandler
 
-port = '/dev/tty.usbmodem14101'
-baud = 250000
+port = 'COM3'
+# port = '/dev/tty.usbmodem14101' # use this port value for Aurelian
+baud = 115200 # baud rate as defined in the streamline-delta-arduino firmware
+# baud = 250000 # use this baud rate for the ZhDK Makerbot printer
 
 # connect to printer
 print_handler = DefaultUSBHandler(port, baud)

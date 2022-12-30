@@ -30,7 +30,8 @@ class Shapehandler:
             self.params_toolpath["diameter"] = self.params_toolpath["diameter"] - growth_factor
 
         number_of_points = factor
-        center = pc.point(100, 100, 0)
+        center = pc.point(0, 0, 0) # use this center for the Delta configuration with the home position in the center
+        # center = pc.point(100, 100, 0) # use this center for cartesian printers with the home position at the corner
         radius = math.sqrt(pow(self.params_toolpath["diameter"], 2) + pow(self.params_toolpath["diameter"], 2)) / 2
 
         points = []
