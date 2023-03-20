@@ -168,7 +168,13 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             socket.emit('printer_setup');
         },
         print: function(event) {
-            socket.emit('start_print', this.points);
+            // send the points and append the first one if the shape is closed
+            var print_points = this.points.slice()
+            if (!this.shapeOpen) {
+                var last_point =  this.points[0];
+                print_points = print_points.concat([last_point]);
+            }
+            socket.emit('start_print', print_points);
             if (this.printLable == "Print") {
                 this.printLable = "Stop"
             } else {

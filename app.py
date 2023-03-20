@@ -149,6 +149,7 @@ def start_print(data):
         printing = False
         return
     
+    # printing = True
     printing = True
 
     shape_handler.params_toolpath['magnitude'] = shape_handler.params_toolpath["mag_goal"]
