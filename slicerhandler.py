@@ -24,7 +24,7 @@ class Slicerhandler:
         }
 
     def create(self, height, points):
-        # creates g-code from a list of points and the actuall hight
+        # creates g-code from a list of points and the actuall hight of the print-layer
 
         # global extrusion_rate
         # global feed_rate
@@ -66,6 +66,7 @@ class Slicerhandler:
 
     def start(self):
         # start sequence to initiate the print
+
         gcode = []
         gcode.append("G90")
         # the following 2 lines are the likely the brim extrustion commands to get the material flowing
@@ -79,6 +80,7 @@ class Slicerhandler:
 
     def end(self):
         # end sequence to finish the print
+        
         gcode = []
 
         gcode.append("G92 E0")

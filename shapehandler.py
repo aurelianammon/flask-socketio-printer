@@ -18,23 +18,53 @@ import numpy as np
 class Shapehandler:
     def __init__(self):
         self.params_toolpath = {
+            "transformation_factor": 0.3,
             "magnitude": 0,
             "mag_goal": 0,
             "wave_lenght": 8,
             "rasterisation": 15,
             "diameter": 30,
-            "dia_goal": 30
+            "dia_goal": 30,
+            "scale": 1,
+            "scale_goal": 1
         }
+
+    def update_transformations(self):
+        # update transformations set in the frontend  
+        if (self.params_toolpath["dia_goal"] > self.params_toolpath["diameter"]):
+            self.params_toolpath["diameter"] = self.params_toolpath["diameter"] + self.params_toolpath["transformation_factor"]
+        elif (self.params_toolpath["dia_goal"] < self.params_toolpath["diameter"]):
+            self.params_toolpath["diameter"] = self.params_toolpath["diameter"] - self.params_toolpath["transformation_factor"]
+
+        if (self.params_toolpath["scale_goal"] > self.params_toolpath["scale"]):
+            self.params_toolpath["scale"] = self.params_toolpath["scale"] + self.params_toolpath["transformation_factor"]
+        elif (self.params_toolpath["scale_goal"] < self.params_toolpath["scale"]):
+            self.params_toolpath["scale"] = self.params_toolpath["scale"] - self.params_toolpath["transformation_factor"]
+
+        growth_factor = 0.1
+        if (self.params_toolpath["mag_goal"] > self.params_toolpath["magnitude"]):
+            self.params_toolpath["magnitude"] = self.params_toolpath["magnitude"] + growth_factor
+        elif (self.params_toolpath["mag_goal"] < self.params_toolpath["magnitude"]):
+            self.params_toolpath["magnitude"] = self.params_toolpath["magnitude"] - growth_factor
+
+        return 0
+    
+    def apply_transformations(self, points):
+        # apply transformations to the shape 
+
+        points = self.scale(points, self.params_toolpath["scale"])
+
+        return points
 
     def create_test(self, factor = 4):
         # this function returns an array containing points
         # the shape is a circle with 'factor' number of corners
 
-        growth_factor = 0.3
-        if (self.params_toolpath["dia_goal"] > self.params_toolpath["diameter"]):
-            self.params_toolpath["diameter"] = self.params_toolpath["diameter"] + growth_factor
-        elif (self.params_toolpath["dia_goal"] < self.params_toolpath["diameter"]):
-            self.params_toolpath["diameter"] = self.params_toolpath["diameter"] - growth_factor
+        # growth_factor = 0.3
+        # if (self.params_toolpath["dia_goal"] > self.params_toolpath["diameter"]):
+        #     self.params_toolpath["diameter"] = self.params_toolpath["diameter"] + growth_factor
+        # elif (self.params_toolpath["dia_goal"] < self.params_toolpath["diameter"]):
+        #     self.params_toolpath["diameter"] = self.params_toolpath["diameter"] - growth_factor
 
         number_of_points = factor
         center = pc.point(0, 0, 0) # use this center for the Delta configuration with the home position in the center
@@ -97,19 +127,26 @@ class Shapehandler:
         # return points
 
     def rotate(self, points, center, angle):
+        # rotate an entire shape
         for i in range(len(points)):
             points[i] = pc.rotate(points[i], center, angle)
 
         return points
+    
+    def scale(self, points, factor):
+        # scale an entire shape
+        for i in range(len(points)):
+            points[i] =  points[i] * factor
 
-    def toolpath(self, points, shape = "NONE"):
+        return points
+
+    def toolpath(self, points, shape = "NONE", angle = 0):
         # ths function creates a toolpath from an array of points and returns a new array
 
-        growth_factor = 0.1
-        if (self.params_toolpath["mag_goal"] > self.params_toolpath["magnitude"]):
-            self.params_toolpath["magnitude"] = self.params_toolpath["magnitude"] + growth_factor
-        elif (self.params_toolpath["mag_goal"] < self.params_toolpath["magnitude"]):
-            self.params_toolpath["magnitude"] = self.params_toolpath["magnitude"] - growth_factor
+        self.update_transformations()
+        points = self.apply_transformations(points)
+
+        points = self.rotate(points, np.array([0, 0, 0]), angle)
 
         step_length = self.params_toolpath["wave_lenght"] / self.params_toolpath["rasterisation"]
         rotation = 360 / self.params_toolpath["rasterisation"]

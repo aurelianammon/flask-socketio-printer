@@ -32,10 +32,12 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             layer_hight: 0
         },
         toolpath_options: {
+            transformation_factor: 0,
             magnitude: 0,
             wave_lenght: 0,
             rasterisation: 0,
-            diameter: 0
+            diameter: 0,
+            scale: 1
         },
         toolpath_type: "NONE"
     },

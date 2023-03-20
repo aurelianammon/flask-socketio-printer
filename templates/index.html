@@ -52,6 +52,13 @@
 							<vue-range-slider :tooltip="null" :min="+0" :max="+2000" step="+1" ref="slider" v-model="slicer_options.feed_rate"></vue-range-slider>
 							<p>Layer Hight: [[ slicer_options.layer_hight ]]</p>
 							<vue-range-slider :tooltip="null" :min="+0.2" :max="+0.8" step="+0.1" ref="slider" v-model="slicer_options.layer_hight"></vue-range-slider>
+							<h5>Shape</h5>
+							<p>Transformation Factor: [[ toolpath_options.transformation_factor ]]</p>
+							<vue-range-slider :tooltip="null" :min="0" :max="0.5" :step="0.01" ref="slider" v-model="toolpath_options.transformation_factor"></vue-range-slider>
+							<p>Scale: [[ toolpath_options.scale ]]</p>
+							<vue-range-slider :tooltip="null" :min="0.5" :max="2" :step="0.1" ref="slider" v-model="toolpath_options.scale"></vue-range-slider>
+							<p>Diameter: [[ toolpath_options.diameter ]]</p>
+							<vue-range-slider :tooltip="null" :min="10" :max="100" :step="1" ref="slider" v-model="toolpath_options.diameter"></vue-range-slider>
 							<h5>Toolpath</h5>
 							<select name="Toolpath Type" class="form-control" v-model="toolpath_type">
 								<option value="NONE">Nothing</option>
@@ -65,8 +72,6 @@
 							<vue-range-slider :tooltip="null" :min="+1" :max="+20" :step="+1" ref="slider" v-model="toolpath_options.wave_lenght"></vue-range-slider>
 							<p>Rasterisation: [[ toolpath_options.rasterisation ]]</p>
 							<vue-range-slider :tooltip="null" :min="1" :max="100" :step="1" ref="slider" v-model="toolpath_options.rasterisation"></vue-range-slider>
-							<p>Diameter: [[ toolpath_options.diameter ]]</p>
-							<vue-range-slider :tooltip="null" :min="10" :max="100" :step="1" ref="slider" v-model="toolpath_options.diameter"></vue-range-slider>
 						</div>
 					</div>
 				</div>

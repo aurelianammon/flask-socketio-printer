@@ -52,10 +52,12 @@ def hello():
     })
     emit('toolpath_type', { 'toolpath_type': tooplpath_type })
     emit('toolpath_options', {
+        'transformation_factor': shape_handler.params_toolpath['transformation_factor'],
         'magnitude': shape_handler.params_toolpath['magnitude'],
         'wave_lenght': shape_handler.params_toolpath['wave_lenght'],
         'rasterisation': shape_handler.params_toolpath['rasterisation'],
-        'diameter': shape_handler.params_toolpath['diameter']
+        'diameter': shape_handler.params_toolpath['diameter'],
+        'scale': shape_handler.params_toolpath['scale']
     })
 
 @socketio.on('slicer_options')
@@ -138,7 +140,7 @@ def zero_layer():
     print("layer set to O")
 
 @socketio.on('start_print')
-def start_print(data):
+def start_print(data, wobble):
 
     original_points = []
     for point in data:
@@ -169,14 +171,14 @@ def start_print(data):
     while printing:
         #gcode = slicerhandler.create(i, shapehandler.create_test(0.5 * i))
 
-        wobbler = 0
+        wobbler = wobble
         angle = angle + random.randint(-wobbler, wobbler)
-        print("angle = " + str(angle))
+        # print("angle = " + str(angle))
 
         # create the shape points
         # points = shape_handler.create_test(10)
         # points = shape_handler.create_stepover(angle, 3)
-        points = shape_handler.toolpath(original_points, tooplpath_type)
+        points = shape_handler.toolpath(original_points, tooplpath_type, angle)
 
         repetitions = 1
         for i in range(repetitions):
