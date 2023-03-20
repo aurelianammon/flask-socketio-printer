@@ -7,6 +7,8 @@
 
 #header {
     overflow: auto;
+    height: 50px;
+    position: fixed;
 }
 
 #header h1 {
@@ -38,50 +40,38 @@
     100% { transform: rotate( 0.0deg) }
 }
 
+.text-input {
+    float: left;
+    margin: 10px;
+    font-size: 25px;
+    font-style: italic;
+    font-weight: 900;
+    /* overflow: visible; */
+    height: 30px;
+}
+
 #event {
     /* cursor: pointer; */
 }
 
-#motion div {
-    position: absolute;
-}
-
 #motion {
-    width: 150px;
-    height:150px;
+    /* width: 150px; */
+    /* height:150px; */
     font-size: 50px;
     line-height: 50px;
     cursor: pointer;
     position: relative;
     margin: auto;
+    margin-bottom: 10px;
+    display: box;
+    display: -webkit-box;
+    display: -moz-box;
 }
 
 #motion div {
-    position: absolute;
-}
-
-#motion #back {
-    top: 0;
-    width: 100%;
     text-align: center;
-    line-height: 40px;
-}
-
-#motion #forth {
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    line-height: 40px;
-}
-
-#motion #left {
-    left: 0;
-    top: 50px;
-}
-
-#motion #right {
-    right: 0;
-    top: 50px;
+    -webkit-box-flex: 1;
+    box-flex: 1;
 }
 
 p {
@@ -89,34 +79,46 @@ p {
 }
 
 .grid-container {
-    clear: both;
+    /* clear: both;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 100%;
+    grid-template-rows: 100%; */
+    width: calc(100% - 200px);
+    padding-top: 50px;
 }
 #control {
-    padding: 10px;
-    background-color: #7b00d9;
-    grid-column: 1 / span 1;
+    padding: 0px;
+    /* background-color: #7b00d9; */
+    /* grid-column: 1 / span 1;
     grid-row: 1 / span 1;
-    border-top-left-radius: 20px;
+    border-top-left-radius: 20px; */
 }
 
-#log {
+#sidebar {
+    background-color: #68f503;
     padding: 10px;
-    background-color: #9200ff8f;
-    grid-column: 2 / span 1;
-    grid-row: 1 / span 1;
-    box-shadow: inset 11px 0 8px -10px #3c3c3c, inset -11px 0px 8px -10px #3c3c3c;
+    width: calc(100vw - (100vh - 30px));
+    display: block;
+    /* overflow: hidden; */
+    position: fixed;
+    top: 50px;
+    right: 10px;
+    /* background-color: #7b00d9; */
+    /* color: white; */
+    height: calc(100vh - 60px);
+    /* scroll-behavior: auto; */
+    overflow-y: scroll;
+
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+#sidebar::-webkit-scrollbar {
+    display: none;
 }
 
 #options {
-    padding: 10px;
-    background-color: #7b00d9;
-    color: white;
-    grid-column: 3 / span 1;
-    grid-row: 1 / span 1;
-    border-top-right-radius: 20px;
+    padding-top: 20px;
 }
 
 button {
@@ -128,4 +130,41 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}
+
+#shape-editor {
+    height: calc(100vh - 50px);
+    padding: 10px;
+    padding-top: 0px;
+}
+
+#shape-functions {
+    position: absolute;
+    padding: 10px;
+}
+
+#svg {
+    height: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    display: block;
+    border: solid 5px #68f503;
+}
+
+#triangle {
+    stroke: #000;
+    stroke-width: 3;
+    fill: none;
+}
+
+.circle {
+    fill-opacity: 0.5;
+    stroke-width: 2;
+    fill: black;
+    stroke: black;
+}
+
+.circle:last-child {
+    fill: #68f503;
+    stroke: #68f503;
 }

@@ -9,13 +9,21 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             current: 0,
             last: 0,
         },
+        // Canvas Magic
+        points: [],
+        draggedElement: null,
+        shapeOpen: true,
+        windowWidth: window.innerWidth,
+        // UI elements
+        printLable: "Print",
         synced_to_bot: false,
         sentiment: 0,
         lenght: 0,
         polling: null,
         layer: 0,
         connected: false,
-        port: '/dev/tty.usbmodem14101',
+        port: 'COM3',
+        baud: '115200',
         log_text: "some random text and even more",
         value: 1,
         slicer_options: {
@@ -62,17 +70,27 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             }
         },
     },
-    computed: {
+    computed: { 
         isPrinting: function () {
           return this.polling != null
         },
-        printLable: function() {
-            if (this.isPrinting) {
-                return "Stop"
-            } else {
-                return "Print"
-            }
+        stringPoints: function () {
+            output = "";
+            this.points.forEach(function (point, index) {
+                output = output + point[0] + "," + point[1] + " ";
+            });
+            return output;
+        },
+        svgFactor: function () {
+            return 150 / this.windowWidth;
         }
+        // printLable: function() {
+        //     if (this.isPrinting) {
+        //         return "Stop"
+        //     } else {
+        //         return "Print"
+        //     }
+        // }
     },
     methods: {
         poll () {
@@ -141,7 +159,7 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         },
         connect: function (event) {
             if( !this.connected ) {
-                socket.emit('printer_connect');
+                socket.emit('printer_connect', this.port, this.baud);
             } else {
                 socket.emit('printer_disconnect');
             }
@@ -150,15 +168,71 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             socket.emit('printer_setup');
         },
         print: function(event) {
-            socket.emit('start_print');
-            if (this.isPrinting) {
-                // this.unpoll()
+            socket.emit('start_print', this.points);
+            if (this.printLable == "Print") {
+                this.printLable = "Stop"
             } else {
-                // this.poll()
+                this.printLable = "Print"
             }
         },
         pause: function(event) {
             socket.emit('printer_pause_resume');
+        },
+        // functionality for the drawing thingy
+        draw(e) {
+            var pt = svg.createSVGPoint();  // Created once for document
+
+            pt.x = e.clientX;
+            pt.y = e.clientY;
+
+            // The cursor point, translated into svg coordinates
+            var cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
+            // console.log("(" + cursorpt.x + ", " + cursorpt.y + ")");
+
+            this.points.push([cursorpt.x, cursorpt.y]);
+            // this.points.push([e.offsetX, e.offsetY]);
+            // this.drawPoints();
+        },
+        loadCircle(e, points = 10, radius = 50, center = [75,75]) {
+            this.points = [];
+            var slice = 2 * Math.PI / points;
+            for (var i = 0; i < points; i++)
+            {
+                var angle = slice * i;
+                var newX = Math.floor(center[0] + radius * Math.cos(angle));
+                var newY = Math.floor(center[1] + radius * Math.sin(angle));
+                var p = [newX, newY];
+                this.points.push(p);
+            }
+        },
+        shapeCloseOpen(e) {
+            this.shapeOpen = !this.shapeOpen;
+        },
+        startDrag(e) {
+            this.draggedElement = e.target;
+        },
+        drag(e) {
+            var pt = svg.createSVGPoint();  // Created once for document
+
+            pt.x = e.clientX;
+            pt.y = e.clientY;
+
+            // The cursor point, translated into svg coordinates
+            var cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
+            // console.log("(" + cursorpt.x + ", " + cursorpt.y + ")");
+
+            if(this.draggedElement != null) {
+                this.points[this.draggedElement.id][0] = cursorpt.x;
+                this.points[this.draggedElement.id][1] = cursorpt.y;
+                // array needs to be destroyed and copied to triger the reactivity from vue
+                this.points = this.points.slice();
+            }
+        },
+        endDrag(e) {
+            this.draggedElement = null;
+        },
+        emptyPoints(e) {
+            this.points = [];
         }
     },
     created () {
@@ -197,5 +271,11 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         .catch(err => {
             console.error(err);
         });
+    },
+    mounted() {
+        var svg = document.getElementById("svg");
+        window.addEventListener('resize', () => {
+            this.windowWidth = window.innerWidth
+        })
     }
 })
