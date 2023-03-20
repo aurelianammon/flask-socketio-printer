@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Name: Shape Handler
+Description: is responsible to deal with the creation and adaption of the shapes
+"""
+
 import time
 import getopt
 import sys
@@ -20,8 +26,9 @@ class Shapehandler:
             "dia_goal": 30
         }
 
-    # default test shape
     def create_test(self, factor = 4):
+        # this function returns an array containing points
+        # the shape is a circle with 'factor' number of corners
 
         growth_factor = 0.3
         if (self.params_toolpath["dia_goal"] > self.params_toolpath["diameter"]):
@@ -47,8 +54,9 @@ class Shapehandler:
         points.append(points[0])
         return points
 
-    # stepover test shape
     def create_stepover(self, angle = 0, stepover_parameter = 10):
+        # stepover test shape
+
         diameter = 50
         center = pc.point(100, 100, 0)
 
@@ -95,8 +103,7 @@ class Shapehandler:
         return points
 
     def toolpath(self, points, shape = "NONE"):
-
-        # print(points, self.params_toolpath)
+        # ths function creates a toolpath from an array of points and returns a new array
 
         growth_factor = 0.1
         if (self.params_toolpath["mag_goal"] > self.params_toolpath["magnitude"]):

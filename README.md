@@ -18,10 +18,11 @@ Run `pip install flask` in the command line.
 - **Note**: In order for Socketio to find the Flask module, it must be added to the Windows PATH folder. Follow the instructions in [this thread](https://stackoverflow.com/questions/3701646/how-to-add-to-the-pythonpath-in-windows-so-it-finds-my-modules-packages) to paste the directory in the Environment Variables settings (**My Computer** > **Properties** > **Advanced System Settings** > **Environment Variables** > **PATH** > **Edit**, then add in install location as defined in the CMD line.)
 
 Run `pip install flask-socketio` in the command line.
+- **Note**: Best to use version 5.2.0 of the `flask-socketio` implementation according to [this issue](https://github.com/projecthorus/radiosonde_auto_rx/issues/654). Otherwise the code will break -- Run `pip install flask-socketio==5.2.0`
 
 Run `pip install flaskwebgui` in the command line.
-- **Note**: newer versions of `flaskwebgui` use different arguments than were implemented in this code, as mentioned in [this issue thread](https://github.com/invoke-ai/InvokeAI/issues/1870); some adjustments will need to be made. but... `server` is definitly a new argument in this module, as the "Usage with Flask-SocketIO" code samples suggest [here (for v.0.3)](https://pypi.org/project/flaskwebgui/) and [here (for v.0.3.7)](https://pypi.org/project/flaskwebgui/0.3.7/)... note that v0.3.7 is the last to use the `start_server` argument. 
--- Run `pip install flaskwebgui==0.3.7` to get the last version responding to the argument as written in this application.
+- ~~**Note**: newer versions of `flaskwebgui` use different arguments than were implemented in this code, as mentioned in [this issue thread](https://github.com/invoke-ai/InvokeAI/issues/1870); some adjustments will need to be made. but... `server` is definitly a new argument in this module, as the "Usage with Flask-SocketIO" code samples suggest [here (for v.0.3)](https://pypi.org/project/flaskwebgui/) and [here (for v.0.3.7)](https://pypi.org/project/flaskwebgui/0.3.7/)... note that v0.3.7 is the last to use the `start_server` argument. 
+-- Run `pip install flaskwebgui==0.3.7` to get the last version responding to the argument as written in this application.~~
 
 Run `pip install pyserial` in the command line.
 

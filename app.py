@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Name: Main Script
+Description: Contains the main logic of the application
+"""
+
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 from flaskwebgui import FlaskUI # import FlaskUI
@@ -11,6 +17,7 @@ from printhandler import DefaultUSBHandler
 
 import shapehandler
 import slicerhandler
+import point_calc as pc
 
 port = 'COM3'
 # port = '/dev/tty.usbmodem14101' # use this port value for Aurelian
@@ -77,9 +84,9 @@ def setToolpath(data):
     print(str(tooplpath_type))
 
 @socketio.on('printer_connect')
-def printer_connect():
+def printer_connect(port, baud):
     print("connect")
-    if print_handler.connect():
+    if print_handler.connect(port, int(baud)):
         emit('connected', {'connected': True})
 
 @socketio.on('printer_disconnect')
@@ -131,7 +138,12 @@ def zero_layer():
     print("layer set to O")
 
 @socketio.on('start_print')
-def start_print():
+def start_print(data):
+
+    original_points = []
+    for point in data:
+        original_points.append(pc.point(point[0] - 75, point[1] - 75, 0))
+
     global printing
     if(printing):
         printing = False
@@ -161,9 +173,9 @@ def start_print():
         print("angle = " + str(angle))
 
         # create the shape points
-        points = shape_handler.create_test(10)
+        # points = shape_handler.create_test(10)
         # points = shape_handler.create_stepover(angle, 3)
-        points = shape_handler.toolpath(points, tooplpath_type)
+        points = shape_handler.toolpath(original_points, tooplpath_type)
 
         repetitions = 1
         for i in range(repetitions):
@@ -186,4 +198,10 @@ def start_print():
 
 if __name__ == '__main__':
     # socketio.run(app) for development
-    FlaskUI(app, socketio=socketio, start_server="flask-socketio").run()
+    FlaskUI(
+        app=app,
+        socketio=socketio,
+        server="flask_socketio",
+        width=940,
+        height=700
+    ).run()

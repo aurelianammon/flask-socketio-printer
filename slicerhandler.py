@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Name: Slicer
+Description: creates gcode from a list of points
+"""
+
 import time
 import getopt
 import sys
@@ -6,18 +12,19 @@ import getopt
 import math
 from options import *
 
-# import custom classes
+# import custom classes for point clculations
 import point_calc as pc
 
 class Slicerhandler:
     def __init__(self):
         self.params = {
-            "extrusion_rate": 0.08,
+            "extrusion_rate": 0.8,
             "feed_rate": 1500,
             "layer_hight": 0.5
         }
 
     def create(self, height, points):
+        # creates g-code from a list of points and the actuall hight
 
         # global extrusion_rate
         # global feed_rate
@@ -58,9 +65,8 @@ class Slicerhandler:
         return gcode
 
     def start(self):
-        
+        # start sequence to initiate the print
         gcode = []
-
         gcode.append("G90")
         # the following 2 lines are the likely the brim extrustion commands to get the material flowing
         # gcode.append("G1 X0 Y0 Z" + str(self.params['layer_hight']))
@@ -72,7 +78,7 @@ class Slicerhandler:
         return gcode
 
     def end(self):
-        
+        # end sequence to finish the print
         gcode = []
 
         gcode.append("G92 E0")

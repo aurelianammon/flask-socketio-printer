@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Name: Print Handler
+Description: This handler is dealing with all the relevant control functions to deal with the printer.
+"""
+
 import time
 import getopt
 import sys
@@ -7,8 +13,6 @@ from printrun.printcore import printcore
 from printrun.pronsole import pronsole
 from printrun import gcoder
 from serial import SerialException
-
-
 
 class DefaultUSBHandler:
     def __init__(self, port = None, baud = None):
@@ -40,9 +44,9 @@ class DefaultUSBHandler:
             self.p.send_now(data)
         else:
             print("nothing to send")
-
-    # needs a list of gcode strings as input        
+        
     def send(self, data = None):
+        # needs a list of gcode strings as input
         if data and self.p.online and not self.p.printing:
             if type(data) is list:
                 self.p.startprint(gcoder.LightGCode(data))
@@ -81,7 +85,6 @@ class DefaultUSBHandler:
     def cancelprint(self):
         self.p.cancelprint()
         print("print canceld")
-
 
 # Testing functions
 if __name__ == "__main__":
