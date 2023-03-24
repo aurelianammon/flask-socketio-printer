@@ -87,7 +87,8 @@ class Slicerhandler:
         gcode.append("G91")
         gcode.append("G1 Z10 E-15")
         gcode.append("G90")
-        gcode.append("G28 X Y")
+        # gcode.append("G28 X Y")
+        gcode.append("G28")
 
         return gcode
 

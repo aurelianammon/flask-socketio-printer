@@ -22,7 +22,7 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         polling: null,
         layer: 0,
         connected: false,
-        port: 'COM3',
+        port: '/dev/cu.usbmodem1101',
         baud: '115200',
         log_text: "some random text and even more",
         value: 1,
@@ -176,7 +176,7 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
                 var last_point =  this.points[0];
                 print_points = print_points.concat([last_point]);
             }
-            socket.emit('start_print', print_points);
+            socket.emit('start_print', print_points, 1);
             if (this.printLable == "Print") {
                 this.printLable = "Stop"
             } else {
