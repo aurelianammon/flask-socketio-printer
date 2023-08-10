@@ -22,8 +22,8 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         polling: null,
         layer: 0,
         connected: false,
-        port: '/dev/cu.usbmodem1101',
-        baud: '115200',
+        port: '/dev/tty.usbmodem2101',
+        baud: '250000',
         log_text: "some random text and even more",
         value: 1,
         slicer_options: {
@@ -40,8 +40,8 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             scale: 1
         },
         toolpath_type: "NONE",
-        plate_center_x: 0,
-        plate_center_y: 0
+        plate_center_x: 100,
+        plate_center_y: 100
     },
     watch: {
         // whenever question changes, this function will run
@@ -180,10 +180,10 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             }
             console.log(print_points);
             if (!this.shapeOpen) {
-                var last_point =  this.points[0];
+                var last_point =  print_points[0];
                 print_points = print_points.concat([last_point]);
             }
-            socket.emit('start_print', print_points, 1);
+            socket.emit('start_print', print_points, 0);
             if (this.printLable == "Print") {
                 this.printLable = "Stop"
             } else {

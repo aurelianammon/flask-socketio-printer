@@ -146,7 +146,7 @@ class Shapehandler:
         self.update_transformations()
         points = self.apply_transformations(points)
 
-        points = self.rotate(points, np.array([0, 0, 0]), angle)
+        points = self.rotate(points, np.array([100, 100, 0]), angle)
 
         step_length = self.params_toolpath["wave_lenght"] / self.params_toolpath["rasterisation"]
         rotation = 360 / self.params_toolpath["rasterisation"]
