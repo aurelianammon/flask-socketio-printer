@@ -39,7 +39,9 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
             diameter: 0,
             scale: 1
         },
-        toolpath_type: "NONE"
+        toolpath_type: "NONE",
+        plate_center_x: 0,
+        plate_center_y: 0
     },
     watch: {
         // whenever question changes, this function will run
@@ -171,7 +173,12 @@ const vm = new Vue({ // Again, vm is our Vue instance's name for consistency.
         },
         print: function(event) {
             // send the points and append the first one if the shape is closed
-            var print_points = this.points.slice()
+            var print_points = [] // = this.points.slice();
+            // bring all points to 0,0
+            for (const element of this.points) {
+                print_points.push([element[0] - 75 + parseInt(this.plate_center_x), element[1] - 75 + parseInt(this.plate_center_y)])
+            }
+            console.log(print_points);
             if (!this.shapeOpen) {
                 var last_point =  this.points[0];
                 print_points = print_points.concat([last_point]);

@@ -4,13 +4,13 @@ Name: Main Script
 Description: Contains the main logic of the application
 """
 
-from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
-from flaskwebgui import FlaskUI # import FlaskUI
-
 import time
 import getopt
 import random
+
+from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
+from flaskwebgui import FlaskUI # import FlaskUI
 
 from options import *
 from printhandler import DefaultUSBHandler
@@ -144,7 +144,7 @@ def start_print(data, wobble):
 
     original_points = []
     for point in data:
-        original_points.append(pc.point(point[0] - 75, point[1] - 75, 0))
+        original_points.append(pc.point(point[0], point[1], 0))
 
     global printing
     if(printing):
